@@ -4,42 +4,61 @@ import Cards from "../Cards/";
 import Pagination from "../Pagination/Pagination";
 import Preloader from "../Preloader/Preloader";
 import dataAPI from "../../api/axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [appData, seAppData] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchResult, setSearchResult] = useState("");
+  const [appData, setAppData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [running, setRunning] = useState(false);
+  const [timer, setTimer] = useState(0);
+
+  const memoizedFetchData = useCallback(async () => {
+    setIsLoading(true);
+    const response = await dataAPI.getFilmsData(searchQuery, currentPage);
+    setAppData(response);
+    setSearchResult(searchQuery);
+    setIsLoading(false);
+  }, [currentPage, searchQuery]);
 
   useEffect(() => {
+    if (running) {
+      const interval = setInterval(() => {
+        if (timer > 800) {
+          memoizedFetchData();
+          setRunning(false);
+          setTimer(0);
+        } else {
+          setTimer(timer + 1);
+        }
+      }, 1);
+      return () => clearInterval(interval);
+    }
+  }, [memoizedFetchData, running, timer]);
+
+  const changeQuery = value => {
+    setRunning(true);
+    setTimer(0);
+    setSearchQuery(value);
     setCurrentPage(1);
-  }, [searchQuery]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      const response = await dataAPI.getFilmsData(searchQuery, currentPage);
-      seAppData(response);
-      setIsLoading(false);
-    };
-    fetchData();
-  }, [searchQuery, currentPage]);
+  };
 
   return (
     <div className={style.app}>
-      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      <Header searchQuery={searchQuery} setSearchQuery={changeQuery} />
       <section className={style.content}>
-        {isLoading ? <Preloader/> : null}
+        {isLoading ? <Preloader /> : null}
         {appData?.Search ? (
           <>
             <h2>
-              You searched for: {searchQuery}, {appData?.totalResults} result
+              You searched for: {searchResult}, {appData?.totalResults} result
             </h2>
             <Cards data={appData?.Search} />
             <Pagination
               currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
+              setCurrentPage={(value) => {setCurrentPage(value); memoizedFetchData()}}
               totalResults={appData?.totalResults}
             />
           </>

@@ -12,7 +12,6 @@ const dataAPI = {
       const res = await instanceAPI.get(
         `?i=tt3896198&apikey=8523cbb8&s=${query}&page=${currentPage}`
       );
-      // console.log(res.data)
       return res.data;
     } catch (error) {
       return error;

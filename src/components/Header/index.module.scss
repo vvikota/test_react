@@ -1,25 +1,44 @@
-
-.header{
+.header {
   background-color: #BADAED;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 50px;
 
-  & input{
+  & input {
     flex: 1 0 auto;
     max-width: 500px;
     margin-right: 20px;
     margin-left: 20px;
   }
+
+  & .user {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    
+    p{
+      margin-left: 5px;
+      margin-right: 5px;
+    }
+
+    & .arrowImg{
+      width: 15px;
+    }
+
+    & .userImg {
+      width: 25px;
+    }
+  }
+
 }
 
-@media(max-width: 720px){
-  .header{
+@media(max-width: 720px) {
+  .header {
     flex-direction: column;
 
     & h1,
-    & input{
+    & input {
       margin-bottom: 15px;
     }
   }

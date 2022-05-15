@@ -3,7 +3,7 @@
 
   & .content {
     position: relative;
-    min-height: calc(100vh - 140px);
+    min-height: calc(100vh - 155px);
     padding: 15px;
     border: 1px solid #000000;
     border-top: none;
@@ -11,7 +11,7 @@
 
   @media(max-width: 720px){
     & .content {
-      min-height: calc(100vh - 210px);
+      min-height: calc(100vh - 240px);
     }
   }
 }
