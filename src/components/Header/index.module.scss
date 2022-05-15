@@ -13,3 +13,14 @@
     margin-left: 20px;
   }
 }
+
+@media(max-width: 720px){
+  .header{
+    flex-direction: column;
+
+    & h1,
+    & input{
+      margin-bottom: 15px;
+    }
+  }
+}
