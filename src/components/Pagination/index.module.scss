@@ -1,4 +1,24 @@
 .PaginationContainer{
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
+
+  & button{
+    margin: 0 3px 7px 3px;
+    font-size: 18px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+
+    &.active{
+      border: 1px solid red;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    &.disabled{
+      opacity: 0.2;
+      pointer-events: none;
+    }
+  }
 }

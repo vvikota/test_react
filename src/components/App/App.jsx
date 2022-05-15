@@ -3,27 +3,44 @@ import Header from "../Header";
 import Cards from "../Cards/";
 import Pagination from "../Pagination/Pagination";
 import dataAPI from "../../api/axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [appData, seAppData] = useState(null)
+  const [appData, seAppData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const onChangeQuery = async ( value ) => {
-    setSearchQuery(value);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
 
-    const response = await dataAPI.getFilmsData(value);
-    seAppData(response)
-
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await dataAPI.getFilmsData(searchQuery, currentPage);
+      seAppData(response);
+    };
+    fetchData();
+  }, [searchQuery, currentPage]);
 
   return (
     <div className={style.app}>
-      <Header searchQuery={searchQuery} setSearchQuery={onChangeQuery} />
+      <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <section className={style.content}>
-        <h2>You searched for: {searchQuery}, {appData?.totalResults} result</h2>
-        <Cards data={appData?.Search}/>
-        <Pagination />
+        {appData?.Search ? (
+          <>
+            <h2>
+              You searched for: {searchQuery}, {appData?.totalResults} result
+            </h2>
+            <Cards data={appData?.Search} />
+            <Pagination
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              totalResults={appData?.totalResults}
+            />
+          </>
+        ) : (
+          <p>Movie not found!</p>
+        )}
       </section>
     </div>
   );

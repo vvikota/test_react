@@ -7,13 +7,15 @@ const instanceAPI = axios.create({
 });
 
 const dataAPI = {
-
-  async getFilmsData(query) {
+  async getFilmsData(query, currentPage) {
     try {
-      const res = await instanceAPI.get(`?i=tt3896198&apikey=8523cbb8&s=${query}`);
+      const res = await instanceAPI.get(
+        `?i=tt3896198&apikey=8523cbb8&s=${query}&page=${currentPage}`
+      );
+      // console.log(res.data)
       return res.data;
     } catch (error) {
-      return error
+      return error;
     }
   },
 };
