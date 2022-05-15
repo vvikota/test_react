@@ -1,0 +1,15 @@
+
+.header{
+  background-color: #BADAED;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 50px;
+
+  & input{
+    flex: 1 0 auto;
+    max-width: 500px;
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+}
