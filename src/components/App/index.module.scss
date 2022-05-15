@@ -8,4 +8,10 @@
     border: 1px solid #000000;
     border-top: none;
   }
+
+  @media(max-width: 720px){
+    & .content {
+      min-height: calc(100vh - 210px);
+    }
+  }
 }
