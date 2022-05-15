@@ -2,6 +2,7 @@ import style from "./index.module.scss";
 import Header from "../Header";
 import Cards from "../Cards/";
 import Pagination from "../Pagination/Pagination";
+import Preloader from "../Preloader/Preloader";
 import dataAPI from "../../api/axios";
 import { useState, useEffect } from "react";
 
@@ -9,6 +10,7 @@ const App = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [appData, seAppData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -16,8 +18,10 @@ const App = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       const response = await dataAPI.getFilmsData(searchQuery, currentPage);
       seAppData(response);
+      setIsLoading(false);
     };
     fetchData();
   }, [searchQuery, currentPage]);
@@ -26,6 +30,7 @@ const App = () => {
     <div className={style.app}>
       <Header searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       <section className={style.content}>
+        {isLoading ? <Preloader/> : null}
         {appData?.Search ? (
           <>
             <h2>
