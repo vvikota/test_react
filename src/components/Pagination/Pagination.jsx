@@ -8,7 +8,7 @@ const Pagination = props => {
     currentPaginationPortion,
     setPaginationPortion,
   } = props;
-  
+
   let buttons;
   let lastPaginationPortion;
 
@@ -28,19 +28,19 @@ const Pagination = props => {
   const getLastPaginationPortion = () => {
     const remains = totalResults % 100 === 0 ? 0 : 1;
     lastPaginationPortion = Math.trunc(totalResults / 100) + remains;
-  }
+  };
 
   getLastPaginationPortion();
 
   const getPrevPagePortion = () => {
     setPaginationPortion(currentPaginationPortion - 1);
     setCurrentPage((currentPaginationPortion - 1) * 10 - 9);
-  }
+  };
 
   const getNextPagePortion = () => {
     setPaginationPortion(currentPaginationPortion + 1);
     setCurrentPage((currentPaginationPortion + 1) * 10 - 9);
-  }
+  };
 
   return (
     <div className={style.PaginationContainer}>
@@ -62,7 +62,9 @@ const Pagination = props => {
       <button
         onClick={getNextPagePortion}
         className={
-          currentPaginationPortion === lastPaginationPortion ? style.disabled : ""
+          currentPaginationPortion === lastPaginationPortion
+            ? style.disabled
+            : ""
         }
       >
         {">"}

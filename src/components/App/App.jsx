@@ -13,7 +13,7 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [currentPaginationPortion, setPaginationPortion] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [running, setRunning] = useState(false);
+  const [isRunningTimer, setRunning] = useState(false);
   const [timer, setTimer] = useState(0);
 
   const memoizedFetchData = useCallback(
@@ -28,19 +28,19 @@ const App = () => {
   );
 
   useEffect(() => {
-    if (running) {
+    if (isRunningTimer) {
       const interval = setInterval(() => {
         if (timer > 500) {
           memoizedFetchData(1);
           setRunning(false);
           setTimer(0);
         } else {
-          setTimer(timer + 1);
+          setTimer(prevTimer => prevTimer + 1);
         }
       }, 1);
       return () => clearInterval(interval);
     }
-  }, [memoizedFetchData, running, timer]);
+  }, [memoizedFetchData, isRunningTimer, timer]);
 
   const changeQuery = value => {
     setRunning(true);
