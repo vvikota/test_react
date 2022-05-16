@@ -11,17 +11,21 @@ const App = () => {
   const [searchResult, setSearchResult] = useState("");
   const [appData, setAppData] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [currentPaginationPortion, setPaginationPortion] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [running, setRunning] = useState(false);
   const [timer, setTimer] = useState(0);
 
-  const memoizedFetchData = useCallback(async (page) => {
-    setIsLoading(true);
-    const response = await dataAPI.getFilmsData(searchQuery, page);
-    setAppData(response);
-    setSearchResult(searchQuery);
-    setIsLoading(false);
-  }, [searchQuery]);
+  const memoizedFetchData = useCallback(
+    async page => {
+      setIsLoading(true);
+      const response = await dataAPI.getFilmsData(searchQuery, page);
+      setAppData(response);
+      setSearchResult(searchQuery);
+      setIsLoading(false);
+    },
+    [searchQuery]
+  );
 
   useEffect(() => {
     if (running) {
@@ -43,6 +47,7 @@ const App = () => {
     setTimer(0);
     setSearchQuery(value);
     setCurrentPage(1);
+    setPaginationPortion(1);
   };
 
   return (
@@ -58,8 +63,13 @@ const App = () => {
             <Cards data={appData?.Search} />
             <Pagination
               currentPage={currentPage}
-              setCurrentPage={(value) => {setCurrentPage(value); memoizedFetchData(value)}}
+              setCurrentPage={value => {
+                setCurrentPage(value);
+                memoizedFetchData(value);
+              }}
               totalResults={appData?.totalResults}
+              currentPaginationPortion={currentPaginationPortion}
+              setPaginationPortion={setPaginationPortion}
             />
           </>
         ) : (
