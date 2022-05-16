@@ -15,19 +15,19 @@ const App = () => {
   const [running, setRunning] = useState(false);
   const [timer, setTimer] = useState(0);
 
-  const memoizedFetchData = useCallback(async () => {
+  const memoizedFetchData = useCallback(async (page) => {
     setIsLoading(true);
-    const response = await dataAPI.getFilmsData(searchQuery, currentPage);
+    const response = await dataAPI.getFilmsData(searchQuery, page);
     setAppData(response);
     setSearchResult(searchQuery);
     setIsLoading(false);
-  }, [currentPage, searchQuery]);
+  }, [searchQuery]);
 
   useEffect(() => {
     if (running) {
       const interval = setInterval(() => {
-        if (timer > 800) {
-          memoizedFetchData();
+        if (timer > 500) {
+          memoizedFetchData(1);
           setRunning(false);
           setTimer(0);
         } else {
@@ -58,7 +58,7 @@ const App = () => {
             <Cards data={appData?.Search} />
             <Pagination
               currentPage={currentPage}
-              setCurrentPage={(value) => {setCurrentPage(value); memoizedFetchData()}}
+              setCurrentPage={(value) => {setCurrentPage(value); memoizedFetchData(value)}}
               totalResults={appData?.totalResults}
             />
           </>
